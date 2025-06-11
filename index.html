@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OrginFake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('wallpaper.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 1rem;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    .floating {
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="h-screen w-screen overflow-hidden relative">
+  <div class="grid grid-cols-4 gap-4 p-6">
+    <button onclick="openApp('weather')" class="glass floating p-4 text-white text-center">
+      <img src="https://img.icons8.com/fluency/48/partly-cloudy-day.png" class="mx-auto"/>
+      <span class="text-sm">天氣</span>
+    </button>
+    <button onclick="openApp('clock')" class="glass floating p-4 text-white text-center">
+      <img src="https://img.icons8.com/fluency/48/clock.png" class="mx-auto"/>
+      <span class="text-sm">時鐘</span>
+    </button>
+    <button onclick="openApp('music')" class="glass floating p-4 text-white text-center">
+      <img src="https://img.icons8.com/fluency/48/musical-notes.png" class="mx-auto"/>
+      <span class="text-sm">音樂</span>
+    </button>
+    <button onclick="openApp('settings')" class="glass floating p-4 text-white text-center">
+      <img src="https://img.icons8.com/fluency/48/settings.png" class="mx-auto"/>
+      <span class="text-sm">設定</span>
+    </button>
+  </div>
+
+  <div id="appWindow" class="hidden absolute top-0 left-0 w-full h-full bg-black bg-opacity-60 flex flex-col items-center justify-center z-10">
+    <div id="appContent" class="bg-white w-4/5 h-3/4 p-6 rounded-2xl shadow-xl overflow-auto relative">
+      <button onclick="closeApp()" class="absolute top-2 right-4 text-black text-xl">✕</button>
+      <div id="appInner"></div>
+    </div>
+  </div>
+
+  <script>
+    function openApp(app) {
+      document.getElementById('appWindow').classList.remove('hidden');
+      const inner = document.getElementById('appInner');
+      if (app === 'weather') {
+        inner.innerHTML = `<h2 class='text-2xl font-bold mb-4'>天氣</h2><p>今天晴時多雲 ☀️，溫度：26°C</p>`;
+      } else if (app === 'clock') {
+        inner.innerHTML = `<h2 class='text-2xl font-bold mb-4'>時鐘</h2><p id='clockTime' class='text-4xl'></p>`;
+        setInterval(() => {
+          const now = new Date();
+          document.getElementById('clockTime').innerText = now.toLocaleTimeString();
+        }, 1000);
+      } else if (app === 'music') {
+        inner.innerHTML = `
+          <h2 class='text-2xl font-bold mb-4'>音樂播放器</h2>
+          <p>♪ 假裝播放中：Dream Track.mp3</p>
+          <audio controls class='mt-4'>
+            <source src='https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' type='audio/mpeg'>
+          </audio>
+        `;
+      } else if (app === 'settings') {
+        inner.innerHTML = `
+          <h2 class='text-2xl font-bold mb-4'>設定</h2>
+          <ul class='list-disc pl-5'>
+            <li>Wi-Fi：已連線</li>
+            <li>藍牙：已開啟</li>
+            <li>主題：亮色</li>
+          </ul>
+        `;
+      }
+    }
+
+    function closeApp() {
+      document.getElementById('appWindow').classList.add('hidden');
+      document.getElementById('appInner').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
